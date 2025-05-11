@@ -100,8 +100,7 @@ void Ball::Update(Paddle& paddle){
     if(BallPosition.y > GetScreenHeight()){
 
         //TODO: Put Game Over Stuff Here
-        BallPosition.x = 640;
-        BallPosition.y = 400;
+        GameOver = true;
 
     }
     if(IsKeyDown(KEY_R)){
@@ -156,8 +155,10 @@ void Blocks::Draw(){
 
 void Blocks::Update(Ball& ball){
 
+    //Stops updating Block Upon destruction
     if(Destroyed == false){
         
+        //Spaghetti Code! YAY!!!
         if(CheckCollisionCircleRec(Vector2{ball.BallPosition.x + 24, ball.BallPosition.y + 24}, 24, 
             Rectangle{BlockPosition.x, BlockPosition.y, 112, 8}) || CheckCollisionCircleRec(Vector2{ball.BallPosition.x + 24, ball.BallPosition.y + 24}, 24, 
                 Rectangle{BlockPosition.x, BlockPosition.y + 70, 112, 8})){
@@ -175,25 +176,29 @@ void Blocks::Update(Ball& ball){
 
             }
             
-            //Side Collisions
-            if(CheckCollisionCircleRec(Vector2{ball.BallPosition.x + 24, ball.BallPosition.y + 24}, 24, 
-                Rectangle({BlockPosition.x, BlockPosition.y, 8, 70}))){
-
-                ball.speed_x = ball.speed_x * -1;
-                ball.BallPosition.x = ball.BallPosition.x - 5;    
-
-            }
-            else if(CheckCollisionCircleRec(Vector2{ball.BallPosition.x + 24, ball.BallPosition.y + 24}, 24, 
-                Rectangle({BlockPosition.x + 111, BlockPosition.y, 8, 70}))){
-
-                ball.speed_x = ball.speed_x * -1;
-                ball.BallPosition.x = ball.BallPosition.x + 5;
-            
-            }
-            
             PlaySound(ball.HitSound2);
             Destroyed = true;
 
+        }
+        
+        //Side Collisions
+        if(CheckCollisionCircleRec(Vector2{ball.BallPosition.x + 24, ball.BallPosition.y + 24}, 24, 
+            Rectangle({BlockPosition.x, BlockPosition.y, 8, 70}))){
+
+            ball.speed_x = ball.speed_x * -1;
+            ball.BallPosition.x = ball.BallPosition.x - 5;    
+            PlaySound(ball.HitSound2);
+            Destroyed = true;
+
+        }
+        else if(CheckCollisionCircleRec(Vector2{ball.BallPosition.x + 24, ball.BallPosition.y + 24}, 24, 
+            Rectangle({BlockPosition.x + 111, BlockPosition.y, 8, 70}))){
+
+            ball.speed_x = ball.speed_x * -1;
+            ball.BallPosition.x = ball.BallPosition.x + 5;
+            PlaySound(ball.HitSound2);
+            Destroyed = true;
+        
         }
     }
 }

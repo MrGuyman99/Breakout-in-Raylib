@@ -4,6 +4,8 @@
 #include<vector>
 #include<cmath>
 #include<ctime>
+#include<thread>
+#include<chrono>
 
 /*
 TODO (New Updates?):
@@ -32,6 +34,7 @@ int main(){
     srand(std::time(0));
     //One global texture for the blocks (Fixes weird errors)
     Texture2D BlockTexture;
+    Sound OhNo = LoadSound("Audio/OhNo!.mp3");
 
     //Random Number between 1 and 2, if 2 BlueBlock, if 1 GreenBlock
     if((std::rand() % 2) + 1 == 2){
@@ -68,7 +71,7 @@ int main(){
 
     }
 
-    while(WindowShouldClose() == false){
+    while(WindowShouldClose() == false && GameBall.GameOver == false){
 
         //Begin Drawing and Updating
         BeginDrawing();
@@ -118,8 +121,12 @@ int main(){
 
     }
 
-    //Unload and close the window
+    //Unload (Play OhNo) and close the window
+    PlaySound(OhNo);
+    std::this_thread::sleep_for(std::chrono::milliseconds(1500));
     UnloadTexture(BlockTexture);
+    UnloadSound(OhNo);
     CloseWindow();
     return 0;
+
 }

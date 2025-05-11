@@ -28,6 +28,7 @@ class Ball{
         int speed_x = 8;
         Sound HitSound2 = LoadSound("Audio/BlockBreakerHit.wav");
         bool Go = false;
+        bool GameOver = false;
 
     private:
         Texture2D BallTexture;
